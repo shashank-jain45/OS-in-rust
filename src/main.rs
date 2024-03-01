@@ -13,4 +13,4 @@ pub extern "C" fn _start() -> ! {
 }
 
 //instead of using cargo build, use cargo build --target wasm32-unknown-unknown
-//if that gives an error, rustup target add wasm32-unknown-unknow first.
+//if that gives an error, rustup target add wasm32-unknown-unknown first.
