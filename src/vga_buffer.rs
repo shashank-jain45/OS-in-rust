@@ -6,7 +6,7 @@ use spin::Mutex;
 lazy_static! {
     pub static ref WRITER: Mutex<Writer>=Mutex::new(Writer {
         column_position:0,
-        color_code: ColorCode::new(Color::Magenta, Color::Black),
+        color_code: ColorCode::new(Color::Yellow, Color::Black),
         buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
     });
 }
@@ -99,7 +99,7 @@ impl Writer {
     }
     fn new_line(&mut self){
         for row in 1..BUFFER_HEIGHT{
-            for col in 1..BUFFER_WIDTH{
+            for col in 0..BUFFER_WIDTH{
                 let character=self.buffer.chars[row][col].read();
                 self.buffer.chars[row-1][col].write(character);
             }
@@ -127,7 +127,7 @@ pub fn print_something(){
     use core::fmt::Write;
     let mut writer = Writer{
         column_position:0,
-        color_code:ColorCode::new(Color::Magenta, Color::Black),
+        color_code:ColorCode::new(Color::Yellow, Color::Black),
         buffer: unsafe { &mut*(0xb8000 as *mut Buffer)},
     };
     writer.write_byte(b'H');
