@@ -11,6 +11,8 @@ use os_in_rust::println;
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
     println!("Hello World{}","!");
+    os_in_rust::init();
+    x86_64::instructions::interrupts::int3();
     #[cfg(test)]
     test_main();
     loop {}
