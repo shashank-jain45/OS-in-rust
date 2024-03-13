@@ -12,20 +12,19 @@ use os_in_rust::println;
 pub extern "C" fn _start() -> ! {
     println!("Hello World{}","!");
     os_in_rust::init();
-    unsafe{
-        *(0xdeadbeef as *mut u8)=42
-    };
+
     #[cfg(test)]
     test_main();
+
     println!("It did not crash!");
-    loop {}
+    os_in_rust::hlt_loop();
 }
 
 #[cfg(not(test))]
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     println!("{}",info);
-    loop{}
+    os_in_rust::hlt_loop();
 }
 
 #[cfg(test)]
