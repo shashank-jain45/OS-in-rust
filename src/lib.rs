@@ -4,15 +4,17 @@
 #![test_runner(crate::test_runner)]
 #![reexport_test_harness_main="test_main"]
 #![feature(abi_x86_interrupt)]
+#![feature(const_mut_refs)]
 
 use core::panic::PanicInfo;
-
+extern crate alloc;
 
 pub mod serial;
 pub mod vga_buffer;
 pub mod interrupts;
 pub mod gdt;
 pub mod memory;
+pub mod allocator;
 
 pub trait Testable{
     fn run(&self)->();
@@ -42,14 +44,6 @@ pub fn test_panic_handler(info: &PanicInfo)->!{
     serial_println!("[failed]\n");
     serial_println!("Error: {}\n",info);
     exit_qemu(QemuExitCode::Failed);
-    hlt_loop();
-}
-
-#[cfg(test)]
-#[no_mangle]
-pub extern "C" fn _start() -> ! {
-    init();
-    test_main();
     hlt_loop();
 }
 
@@ -101,5 +95,8 @@ entry_point!(test_kernel_main);
 #[cfg(test)]
 fn test_kernel_main(_boot_info: &'static BootInfo)->!{
     init();
-    test_main();hlt_loop();
+    test_main();
+    hlt_loop();
 }
+
+
